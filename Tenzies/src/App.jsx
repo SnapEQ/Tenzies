@@ -43,22 +43,29 @@ function App() {
 
 
 
-  function rollDice(){
-    if(!gameWon){
-      setDice(oldDice => oldDice.map(die => 
+  function rollDice() {
+
+    if (!gameWon) {
+      setDice(oldDice => oldDice.map(die =>
         die.isHeld ? die :
-        {...die, value: Math.ceil(Math.random() * 6)}
+          { ...die, value: Math.floor(Math.random() * 6) }
       ))
+
+      if (dice.every(die => die.isHeld) &&
+        !dice.every(die => die.value === dice[0].value)) {
+        setDice(generateAllNewDice())
+      }
     } else {
       setDice(generateAllNewDice());
     }
+
   }
 
 
   function hold(id) {
     setDice(oldDice => oldDice.map(die =>
       die.id === id ?
-        { ...die, isHeld: !dice.isHeld } :
+        { ...die, isHeld: !die.isHeld } :
         die
     ))
   }
